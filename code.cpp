@@ -3,6 +3,25 @@
 #include <cstdlib>
 #include <cmath>
 #include <unistd.h>
+#include <vector>
+
+
+std::array<int,64> null_array() { 
+    std::array<int,64> null;
+    for (int i = 0; i < 64; i++) {
+        null[i] = 0;
+    }
+    return null;
+}
+
+
+struct ListNode {
+    std::array<int,64> val;
+    ListNode* next;
+    ListNode(): val(null_array()), next(nullptr) {}
+    ListNode(std::array<int,64> x): val(x), next(nullptr) {}
+    ListNode(std::array<int,64> x, ListNode* n): val(x), next(n) {}
+};
 
 std::array<int, 64> step(std::array<int, 64> arr) {
     std::array<int, arr.size()> res; 
@@ -47,6 +66,24 @@ std::array<int, 64> step(std::array<int, 64> arr) {
     return res; 
 }
 
+bool alive(std::array<int,64> arr) {
+    if (arr != null_array()) {
+        return true;
+    }
+    return false;
+}
+
+
+bool not_period(std::array<int,64> arr, ListNode* mass){
+    while (mass != nullptr) {
+        if (mass->val == arr) {
+            return false;
+        }
+        mass = mass->next;
+    }
+    return true;
+}
+
 void print(std::array<int,64> arr) {
     int MeshSize = sqrt(arr.size());
     std::cout << std::endl;
@@ -78,16 +115,29 @@ void print(std::array<int,64> arr) {
     std::cout << std::endl << std::endl;
 }
 
+ListNode* add_array(std::array<int,64> arr, ListNode* head) {
+    ListNode* result = new ListNode(arr, head);
+    return result;
+}
+
+
 int main() {
     const int size = 8;
-    std::array <int, size * size> start;
-    for (int i = 0; i < size * size; i++) {
-        start[i] = std::rand() % 2;
+    ListNode* head = nullptr;
+    std::array<int,9> a = {1,2,4,0,1,3,4,5,1};
+    std::array<int,9> b = {0,1,1,2,2,4,4,4,5};
+    std::array <int, size * size> start = null_array();
+    for (int i = 0; i < 9; i++){
+        start[size * b[i] + a[i]] = 1;
     }
+    /*for (int i = 0; i < size * size; i++) {
+        start[i] = std::rand() % 2;
+    }*/
     print(start);
-    for (int i = 0; i < 6; i++){
+    while (alive(start) && not_period(start, head)) {
         sleep(2);
         std::system("clear");
+        head = add_array(start, head);
         start = step(start); 
         print(start);
     }
