@@ -7,22 +7,6 @@ const int width = 32;
 const int height = 11; 
 const int table_size = width * height;
 
-/*std::array<int,table_size> null_array() { 
-    std::array<int,table_size> null;
-    for (int i = 0; i < table_size; i++) {
-        null[i] = 0;
-    }
-    return null;
-}*/
-
-struct ListNode {
-    std::array<int,table_size> val;
-    ListNode* next;
-    ListNode(): val({}), next(nullptr) {}
-    ListNode(std::array<int,table_size> x): val(x), next(nullptr) {}
-    ListNode(std::array<int,table_size> x, ListNode* n): val(x), next(n) {}
-};
-
 std::array<int,table_size> step(std::array<int,table_size> arr) {
     std::array<int, table_size> res; 
     for (int i = 0; i < height; i++) {
@@ -73,12 +57,12 @@ bool is_alive(std::array<int,table_size> arr) {
     return false;
 }
 
-bool no_period(std::array<int,table_size> arr, ListNode* mass){
-    while (mass != nullptr) {
-        if (mass->val == arr) {
+bool no_period(std::array<int,table_size> arr, std::list<std::array<int,table_size>> mass){
+    while (mass.size() != 0) {
+        if (mass.front() == arr) {
             return false;
         }
-        mass = mass->next;
+        mass.pop_front();
     }
     return true;
 }
@@ -113,22 +97,17 @@ void print(std::array<int,table_size> arr) {
     std::cout << std::endl << std::endl;
 }
 
-ListNode* add_array(std::array<int,table_size> arr, ListNode* head) {
-    ListNode* result = new ListNode(arr, head);
-    return result;
-}
-
 int main() {
-    ListNode* head = nullptr;
+    std::list<std::array<int,table_size>> head;
     std::array <int, table_size> start = {};
     for (int i = 0; i < table_size; i++) {
         start[i] = std::rand() % 2;
     }
-    /*while (is_alive(start) && no_period(start, head)) {
+    while (is_alive(start) && no_period(start, head)) {
         sleep(1);
         std::system("clear");
-        head = add_array(start, head);
+        head.push_back(start);
         start = step(start); 
         print(start);
-    }*/
+    }
 }
