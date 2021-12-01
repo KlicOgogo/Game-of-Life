@@ -60,7 +60,7 @@ bool is_alive(std::array<int,Table::table_size>& arr) {
     return false;
 }
 
-bool no_period(std::array<int,Table::table_size>& arr, std::list<std::array<int,Table::table_size>> mass){
+bool no_period(std::array<int,Table::table_size>& arr, std::list<std::array<int,Table::table_size>> mass) {
     while (mass.size() != 0) {
         if (mass.front() == arr) {
             return false;
