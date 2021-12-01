@@ -16,34 +16,33 @@ std::array<int,Table::table_size> step(std::array<int,Table::table_size>& arr) {
     for (int i = 0; i < Table::height; i++) {
         for (int j = 0; j < Table::width; j++) {
             int count = 0;
-            int k = 0, n = 0;
-            int l = 3, m = 3;
-            if (i == 0) {
-                k = 1;
+            if (i > 0 && j > 0 && arr[Table::width * (i - 1) + (j - 1)] == 1) {
+                count++;
             }
-            if (i == Table::height - 1) {
-                l = 2;
+            if (i > 0 && arr[Table::width * (i - 1) + j] == 1) {
+                count++;
             }
-            for (k; k < l; k++) {
-                if (j == 0) {
-                    n = 1;
-                } else {
-                    n = 0;
-                }
-                if (j == Table::width - 1) {
-                    m = 2;
-                } else {
-                    m = 3;
-                }
-                for (n; n < m; n++) {
-                    if (arr[Table::width * (i + k - 1) + j + n - 1] == 1) {
-                        count++;
-                    }
-                }
+            if (i > 0 && j + 1 < Table::width && arr[Table::width * (i - 1) + (j + 1)] == 1) {
+                count++;
+            }
+            if (j > 0 && arr[Table::width * i + (j - 1)] == 1) {
+                count++;
+            }
+            if (j + 1 < Table::width && arr[Table::width * i + (j + 1)] == 1) {
+                count++;
+            }
+            if (i + 1 < Table::height && j > 0 && arr[Table::width * (i + 1) + (j - 1)] == 1) {
+                count++;
+            }
+            if (i + 1 < Table::height && arr[Table::width * (i + 1) + j] == 1) {
+                count++;
+            }
+            if (i + 1 < Table::height && j + 1 < Table::width && arr[Table::width * (i + 1) + (j + 1)] == 1) {
+                count++;
             }
             if (arr[Table::width * i + j] == 0 && count == 3){
                 res[Table::width * i + j] = 1;
-            } else if (arr[Table::width * i + j] == 1 && (count == 3 || count == 4)){
+            } else if (arr[Table::width * i + j] == 1 && (count == 2 || count == 3)){
                 res[Table::width * i + j] = 1;
             } else {
                 res[Table::width * i + j] = 0;
