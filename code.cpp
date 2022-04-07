@@ -116,4 +116,5 @@ int main() {
         game1.print();
     }
     game2.print();
+    return 0;
 }
