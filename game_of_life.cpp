@@ -11,8 +11,8 @@ GameOfLife::GameOfLife(int width, int height): width_(width), height_(height), t
 };
 
 void GameOfLife::step() { 
-    add_to_list_of_mas();
-    std::vector <int> res(table_size_); 
+    state_history_.push_back(table);
+    std::vector<int> res(table_size_); 
     for (int i = 0; i < height_; i++) {
         for (int j = 0; j < width_; j++) {
             int count = 0;
@@ -37,11 +37,7 @@ void GameOfLife::step() {
 }
 
 bool GameOfLife::can_step() const {
-    if (is_alive() && no_period()) {
-        return true;
-    } else {
-        return false;
-    }
+    return is_alive() && no_period;
 }
 
 void GameOfLife::print() const {
@@ -82,17 +78,13 @@ void GameOfLife::random() {
         table[i] = distrib(gen);
     }
 }
-
-void GameOfLife::add_to_list_of_mas() {
-    state_history_.push_back(table);
-}
         
 bool GameOfLife::is_alive() const {
     std::vector<int> null_vector(table_size_);
     return table != null_vector;
 }
 
-bool GameOfLife:: no_period() const {
+bool GameOfLife::no_period() const {
     std::list<std::vector<int>> mass = state_history_;
     while (mass.size() != 0) {
         if (mass.front() == table) {

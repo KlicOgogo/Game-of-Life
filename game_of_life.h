@@ -20,7 +20,6 @@ class GameOfLife {
         std::vector<int> table = {};
         std::list<std::vector<int>> state_history_;
         void random();
-        void add_to_list_of_mas();
         bool is_alive() const;
         bool no_period() const;
 };
