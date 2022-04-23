@@ -1,39 +1,39 @@
 #include "game_of_life.h"
 
 GameOfLife::GameOfLife(): width_(32), height_(11), table_size_(32 * 11) {
-    table.resize(table_size_);
+    table_.resize(table_size_);
     random();
 };
         
 GameOfLife::GameOfLife(int width, int height): width_(width), height_(height), table_size_(width * height) {
-    table.resize(table_size_);
+    table_.resize(table_size_);
     random();
 };
 
 void GameOfLife::step() { 
-    state_history_.push_back(table);
+    state_history_.push_back(table_);
     std::vector<int> res(table_size_); 
     for (int i = 0; i < height_; i++) {
         for (int j = 0; j < width_; j++) {
             int count = 0;
-            count += (i > 0 && j > 0 && table[width_ * (i - 1) + (j - 1)] == 1);
-            count += (i > 0 && table[width_ * (i - 1) + j] == 1);
-            count += (i > 0 && j + 1 < width_ && table[width_ * (i - 1) + (j + 1)] == 1);
-            count += (j > 0 && table[width_ * i + (j - 1)] == 1);
-            count += (j + 1 < width_ && table[width_ * i + (j + 1)] == 1);
-            count += (i + 1 < height_ && j > 0 && table[width_ * (i + 1) + (j - 1)] == 1);
-            count += (i + 1 < height_ && table[width_ * (i + 1) + j] == 1);
-            count += (i + 1 < height_ && j + 1 < width_ && table[width_ * (i + 1) + (j + 1)] == 1);
-            if (table[width_ * i + j] == 0 && count == 3) {
+            count += (i > 0 && j > 0 && table_[width_ * (i - 1) + (j - 1)] == 1);
+            count += (i > 0 && table_[width_ * (i - 1) + j] == 1);
+            count += (i > 0 && j + 1 < width_ && table_[width_ * (i - 1) + (j + 1)] == 1);
+            count += (j > 0 && table_[width_ * i + (j - 1)] == 1);
+            count += (j + 1 < width_ && table_[width_ * i + (j + 1)] == 1);
+            count += (i + 1 < height_ && j > 0 && table_[width_ * (i + 1) + (j - 1)] == 1);
+            count += (i + 1 < height_ && table_[width_ * (i + 1) + j] == 1);
+            count += (i + 1 < height_ && j + 1 < width_ && table_[width_ * (i + 1) + (j + 1)] == 1);
+            if (table_[width_ * i + j] == 0 && count == 3) {
                 res[width_ * i + j] = 1;
-            } else if (table[width_ * i + j] == 1 && (count == 2 || count == 3)) {
+            } else if (table_[width_ * i + j] == 1 && (count == 2 || count == 3)) {
                 res[width_ * i + j] = 1;
             } else {
                 res[width_ * i + j] = 0;
             }
         }
     }
-    table = res; 
+    table_ = res; 
 }
 
 bool GameOfLife::can_step() const {
@@ -53,7 +53,7 @@ void GameOfLife::print() const {
         std::cout << "|" << std::endl << "|";
         for (int i = 0; i < width_; i++) {
             std::cout << " ";
-            if (table[width_ * j + i] == 1) {
+            if (table_[width_ * j + i] == 1) {
                 std::cout << "*";
             } else {
                 std::cout << " ";
@@ -75,19 +75,19 @@ void GameOfLife::random() {
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> distrib(0, 1);
     for (int i = 0; i < table_size_; i++) {
-        table[i] = distrib(gen);
+        table_[i] = distrib(gen);
     }
 }
         
 bool GameOfLife::is_alive() const {
     std::vector<int> null_vector(table_size_);
-    return table != null_vector;
+    return table_ != null_vector;
 }
 
 bool GameOfLife::no_period() const {
     std::list<std::vector<int>> mass = state_history_;
     while (mass.size() != 0) {
-        if (mass.front() == table) {
+        if (mass.front() == table_) {
             return false;
         }
         mass.pop_front();

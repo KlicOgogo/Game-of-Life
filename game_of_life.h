@@ -17,9 +17,10 @@ class GameOfLife {
         int width_;
         int height_;
         int table_size_;
-        std::vector<int> table = {};
+        std::vector<int> table_ = {};
         std::list<std::vector<int>> state_history_;
         void random();
+        void add_to_list_of_mas();
         bool is_alive() const;
         bool no_period() const;
 };
